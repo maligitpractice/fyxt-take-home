@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fyxt-production
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/maligitpractice/fyxt-take-home.git
+    targetRevision: main
+    path: helm/fyxt-app
+    helm:
+      valueFiles:
+        - values-production.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
